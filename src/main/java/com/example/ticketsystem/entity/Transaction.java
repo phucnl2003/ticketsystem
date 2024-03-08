@@ -1,7 +1,7 @@
 package com.example.ticketsystem.entity;
 
 
-import com.example.ticketsystem.enums.StatusOrder;
+import com.example.ticketsystem.enums.Method;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,35 +14,24 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "orders")
-public class Order {
+@Table(name = "transaction")
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcType(VarcharJdbcType.class)
     private UUID id;
 
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "film_id", referencedColumnName = "id")
-    private Film film;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
-    private Voucher voucher;
-
-    @Column(name = "quality")
-    private int quality;
+    @Column(name = "method")
+    private Method method;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @Column(name = "total")
-    private int total;
-
-    @Column(name = "status_order")
-    @Enumerated(EnumType.STRING)
-    private StatusOrder statusOrder;
 }
